@@ -25,7 +25,11 @@ SECRET_KEY = "wssl$!%gyh_^_)l-icj5ilwy*h-#!a-!c$q5c(y%1(vrv%jupw"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = (
+    [os.environ["WEBSITE_SITE_NAME"] + ".azurewebsites.net", "127.0.0.1"]
+    if "WEBSITE_SITE_NAME" in os.environ
+    else []
+)
 
 
 # Application definition

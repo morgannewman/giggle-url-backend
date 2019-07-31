@@ -3,11 +3,13 @@ python: 3.7
 
 install:
   - pip install pipenv
-  - pipenv install pipenv_to_requirements
 
 script: echo skipping tests
 
-before_deploy: pipenv run pipenv_to_requirements -f
+before_deploy:
+  - pipenv install --dev --skip-lock pipenv_to_requirements
+  - pipenv run pipenv_to_requirements -f
+  - git add -A && git commit -m "Adds requirements.txt files"
 
 deploy:
   provider: azure_web_apps
