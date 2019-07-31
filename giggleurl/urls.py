@@ -15,5 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
 
-urlpatterns = [path("api/", include("api.urls"))]
+
+def health(request):
+    return HttpResponse("Hello world")
+
+
+urlpatterns = [path("api/", include("api.urls")), path("health/", health)]
+
