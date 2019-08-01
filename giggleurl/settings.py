@@ -79,7 +79,9 @@ LOGGING = {
     "handlers": {
         "logfile": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": ("app.log" if PY_ENV == "production" else "app.log"),
+            "filename": (
+                "/home/LogFiles/app.log" if PY_ENV == "production" else "app.log"
+            ),
         }
     },
     "loggers": {
