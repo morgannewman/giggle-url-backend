@@ -11,8 +11,9 @@ for combination, parts in combinations.items():
         increment = i + 1
         query = """
             CREATE SEQUENCE {}_{}_seq
-                start {}
-                increment {};
+                MINVALUE -1
+                START {}
+                INCREMENT {};
         """.format(
             combination, part, start, increment
         )
