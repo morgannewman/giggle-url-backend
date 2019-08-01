@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "rest_framework",
     "api",
+    "word_service",
 ]
 
 MIDDLEWARE = [

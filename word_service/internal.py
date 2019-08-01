@@ -1,15 +1,3 @@
-import os
-import json
-
-# Loads all dictionaries into memory
-dicts = {}
-for file_name in os.listdir("word_service/dicts"):
-    name = file_name.rstrip(".json")
-
-    with open("word_service/dicts/{}".format(file_name), "r") as f:
-        dicts[name] = json.load(f)
-
-
 class PARTS:
     """
     Enum of word parts
@@ -33,3 +21,15 @@ combinations = {
     "adv_vpast_ns": [PARTS.adverb, PARTS.verb_past, PARTS.noun_singular],
     "adv_vpast_an": [PARTS.adverb, PARTS.verb_past, PARTS.animal],
 }
+
+combinations_list = [
+    "adj_sup_ns",
+    "adv_vprog_np",
+    "adv_vprog_an",
+    "adv_vpast_ns",
+    "adv_vpast_an",
+]
+
+
+def get_seq(combination, part):
+    return "{}_{}_seq".format(combination, part)
