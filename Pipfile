@@ -7,9 +7,11 @@ verify_ssl = true
 black = "*"
 
 [packages]
-psycopg2 = "*"
 django = "*"
 djangorestframework = "*"
+# On macOS, install might fail unless you run the following:
+# export LDFLAGS="-L/usr/local/opt/openssl/lib
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"

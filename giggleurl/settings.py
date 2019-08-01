@@ -12,46 +12,31 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+PY_ENV = os.getenv("PY_ENV", "development")
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+DEBUG = PY_ENV != "production"
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "wssl$!%gyh_^_)l-icj5ilwy*h-#!a-!c$q5c(y%1(vrv%jupw"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# Required for Azure deployment
 ALLOWED_HOSTS = (
     [os.environ["WEBSITE_SITE_NAME"] + ".azurewebsites.net", "127.0.0.1"]
     if "WEBSITE_SITE_NAME" in os.environ
-    else []
+    else ["localhost"]
 )
 
-
-# Application definition
-
 INSTALLED_APPS = [
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
     "rest_framework",
     "api",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -76,49 +61,41 @@ TEMPLATES = [
 WSGI_APPLICATION = "giggleurl.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": os.getenv("DB_NAME", "giggleurl"),
-        "USER": os.getenv("DB_USERNAME", "dev"),
+        "USER": os.getenv("DB_USER", "dev"),
         "PASSWORD": os.getenv("DB_PASSWORD", "devpassword"),
         "HOST": os.getenv("DB_HOSTNAME", "localhost"),
         "PORT": os.getenv("DB_PORT", 5432),
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "handlers": {
+        "logfile": {
+            "class": "logging.handlers.WatchedFileHandler",
+            "filename": ("app.log" if PY_ENV == "production" else "app.log"),
+        }
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
+    "loggers": {
+        "django": {
+            "handlers": ["logfile"],
+            "level": os.getenv("LOG_LEVEL", "INFO"),
+            "propagate": False,
+        }
+    },
+}
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_L10N = True
-
+USE_I18N = False
+USE_L10N = False
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = "/static/"
